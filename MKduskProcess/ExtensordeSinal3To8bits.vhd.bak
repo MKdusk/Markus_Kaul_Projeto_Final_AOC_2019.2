@@ -1,0 +1,25 @@
+LIBRARY ieee; 
+USE ieee.std_logic_1164.all; 
+USE ieee.numeric_std.all;  
+USE ieee.std_logic_unsigned.all;
+
+ENTITY ExtensordeSinal3To8bits IS
+	PORT(
+		ENTRADA : IN STD_LOGIC_VECTOR(2 DOWNTO 0); 
+		SAIDA   : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
+	);
+	
+END ExtensordeSinal3To8bits;
+
+ARCHITECTURE BEHAVIOR OF ExtensordeSinal3To8bits IS
+
+BEGIN
+ process(ENTRADA)
+  begin
+	if(ENTRADA(2) = '1') then
+		SAIDA <= ("11111") & ENTRADA;		
+	elsif (ENTRADA(2) = '0') then
+		SAIDA <= ("00000") & ENTRADA;		
+	end if;
+ end process;
+END BEHAVIOR;

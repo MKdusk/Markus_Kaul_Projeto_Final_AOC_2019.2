@@ -1,0 +1,48 @@
+-- Multiplexador
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+
+ENTiTY Multiplexador IS
+	PORT(
+		A, B, S1: IN std_logic;
+		R : OUT std_logic);
+END Multiplexador;
+
+ARCHITECTURE Mux of Multiplexador IS
+	COMPONENT PortAnd IS
+		Port(
+			A, B: IN std_logic;
+			R : OUT std_logic);
+	END COMPONENT;
+	
+	COMPONENT PortOr IS
+		Port(
+			A, B : IN std_logic;
+			R : OUT std_logic);
+	END COMPONENT;
+
+	COMPONENT PortNot IS
+		Port(
+			A : IN std_logic;
+			R : OUT std_logic);
+	END COMPONENT;
+	
+	--SAIDAS NOTs
+	SIGNAL N1 : std_logic;
+	
+	--SAIDAS ANDs
+	SIGNAL R1 : std_logic;
+	SIGNAL R2 : std_logic;
+	
+BEGIN
+	--PORT MAPs das saidas NOTs
+	G1: PortNot PORT MAP(S1, N1);
+	
+	--PORT MAPs das saidas ANDs
+	G2: PortAnd PORT MAP(A, N1, R1);
+	G3: PortAnd PORT MAP(B, S1, R2);
+	
+	--PORT MAPs da saida OR
+	G4: PortOr PORT MAP(R1, R2, R);
+	
+END Mux;

@@ -1,0 +1,24 @@
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+USE ieee.numeric_std.ALL;
+
+ENTITY RAM IS
+	port(dado_entrada : IN UNSIGNED(7 DOWNTO 0);
+		  dado_saida   : OUT UNSIGNED(7 DOWNTO 0);
+		  endereco     : IN UNSIGNED(3 DOWNTO 0);
+		  we, clock       : IN STD_LOGIC);
+END RAM;
+
+ARCHITECTURE teste OF RAM IS
+	TYPE arranjo_memoria IS ARRAY(0 TO 7) OF UNSIGNED(7 DOWNTO 0);
+	SIGNAL memoria : arranjo_memoria;
+BEGIN
+	PROCESS(clock)
+	BEGIN
+		IF rising_edge(clock) THEN
+			IF we = '1' THEN memoria(to_integer(endereco)) <= dado_entrada;
+			END IF;
+		END IF;
+	END PROCESS;
+	dado_saida <= memoria(to_integer(endereco));
+END teste;

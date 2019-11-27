@@ -1,0 +1,101 @@
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+
+ENTITY Unidade_Controle IS
+	PORT(opcode : IN std_logic_vector(2 DOWNTO 0);
+		  funct : IN std_logic_vector (2 downto 0);
+		  reset : IN std_logic;
+		  reg_dst, mem_to_reg, ula_op : OUT std_logic_vector(1 DOWNTO 0);
+		  jump, branch, mem_read, mem_write, ula_src, reg_write, sing_or_zero : OUT std_logic);
+END Unidade_Controle;
+
+ARCHITECTURE Behavioral OF Unidade_Controle IS
+BEGIN
+	PROCESS(reset, opcode)
+	BEGIN
+		IF(reset = '1') THEN
+			reg_dst <= "00";
+			mem_to_reg <= "00";
+			ula_op <= "000";
+			jump <= '0';
+			branch <= '0';
+			mem_read <= '0';
+			mem_write <= '0';
+			ula_src <= '0';
+			reg_write <= '0';
+			sing_or_zero <= '1';
+		ELSE
+			CASE opcode IS
+				WHEN "000" => -- tipo R
+					reg_dst <= "01";
+					mem_to_reg <= "00";
+					ula_op <= funct;
+					jump <= '0';
+					branch <= '0';
+					mem_read <= '0';
+					mem_write <= '0';
+					ula_src <= '0';
+					reg_write <= '1';
+					sing_or_zero <= '1';
+				WHEN "111" => -- jump
+					reg_dst <= "00";
+					mem_to_reg <= "00";
+					ula_op <= "000";
+					jump <= '1';
+					branch <= '0';
+					mem_read <= '0';
+					mem_write <= '0';
+					ula_src <= '0';
+					reg_write <= '0';
+					sing_or_zero <= '1';
+				WHEN "001" => -- lw
+					reg_dst <= "00";
+					mem_to_reg <= "01";
+					ula_op <= "000";
+					jump <= '0';
+					branch <= '0';
+					mem_read <= '1';
+					mem_write <= '0';
+					ula_src <= '1';
+					reg_write <= '1';
+					sing_or_zero <= '1';
+				WHEN "010" => -- sw;
+					reg_dst <= "00";
+					mem_to_reg <= "00";
+					ula_op <= "11";
+					jump <= '0';
+					branch <= '0';
+					mem_read <= '0';
+					mem_write <= '1';
+					ula_src <= '1';
+					reg_write <= '0';
+					sing_or_zero <= '1';
+				WHEN "011" => -- beq
+					reg_dst <= "00";
+					mem_to_reg <= "00";
+					ula_op <= "000";
+					jump <= '0';
+					branch <= '1';
+					mem_read <= '0';
+					mem_write <= '0';
+					ula_src <= '0';
+					reg_write <= '0';
+					sing_or_zero <= '1';
+				WHEN OTHERS =>
+					reg_dst <= "01";
+					mem_to_reg <= "00";
+					ula_op <= "000";
+					jump <= '0';
+					branch <= '0';
+					mem_read <= '0';
+					mem_write <= '0';
+					ula_src <= '0';
+					reg_write <= '1';
+					sing_or_zero <= '1';
+			END CASE;
+		END IF;
+	END PROCESS;
+END Behavioral;
+			
+			
+			
